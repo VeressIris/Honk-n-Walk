@@ -1,0 +1,34 @@
+# Ignore all files and directories in the root of the project
+/*
+
+# But don't ignore the .gitignore file itself
+!.gitignore
+
+# Ignore all directories except for the Assets directory
+# (where we'll later whitelist the _Scripts folder)
+!*/
+
+# Whitelist the Assets directory
+!/Assets/
+
+# Ignore all directories and files within the Assets directory except for .cs files in the _Scripts directory
+/Assets/*
+!/Assets/_Scripts/
+/Assets/_Scripts/*
+!/Assets/_Scripts/*.cs
+
+# Ignore some other files and directories that are not needed in version control
+# (you may modify this section as needed for your project)
+/Assets/Plugins/
+/Assets/StreamingAssets/
+/Assets/Editor/
+/Library/*
+/Temp/
+/Build/
+/ProjectSettings/
+/Packages/
+/Logs/*
+/UserSettings/*
+/obj/*
+/.vs/*
+/.idea/*
