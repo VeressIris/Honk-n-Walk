@@ -9,6 +9,8 @@ public class Damage : MonoBehaviour
     private CameraShake shakeScript;
     private Animator playerAnim;
     private PlayerInput playerInput;
+    private PostProcessingFX postProcessing;
+
     private void Start()
     {
         gameManager = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
@@ -19,6 +21,7 @@ public class Damage : MonoBehaviour
         playerInput = playerRb.gameObject.GetComponent<PlayerInput>();
         
         shakeScript = GameObject.FindWithTag("MainCamera").GetComponentInChildren<CameraShake>();
+        postProcessing = GameObject.FindWithTag("MainCamera").GetComponent<PostProcessingFX>();
     }
 
     private void OnTriggerEnter2D(Collider2D coll)
@@ -26,13 +29,13 @@ public class Damage : MonoBehaviour
         if (coll.gameObject.CompareTag("Player"))
         {
             //TO DO: play sound effect
-
-            shakeScript.ShakeCamera(1f, 0.2f);
-
             playerController.health--;
-            
+
             gameManager.HideHearts(playerController.health);
 
+            //bonus effects:
+            shakeScript.ShakeCamera(1.685f, 0.225f);
+            StartCoroutine(postProcessing.PlayerDamageEffect(0.5f));
             playerRb.AddForce(Vector2.up * 2f, ForceMode2D.Impulse); //bounce player
 
             if (playerController.health == 0)
@@ -46,7 +49,7 @@ public class Damage : MonoBehaviour
         {
             gameManager.gameOver = true;
 
-            shakeScript.ShakeCamera(1.25f, 0.2f);
+            shakeScript.ShakeCamera(2f, 0.25f);
             KillGoose(coll);
         }
     }

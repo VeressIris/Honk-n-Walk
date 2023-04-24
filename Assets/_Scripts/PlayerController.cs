@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Shooting")]
     [SerializeField] private Transform cam; // need this in order to spawn projectile as child of the camera in order for it to not lag behind camera
-
+    
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -67,9 +67,19 @@ public class PlayerController : MonoBehaviour
     }
 
     //invoked as Unity Event in player input component
-    public void Shoot(InputAction.CallbackContext context)
+    public void Shoot(InputAction.CallbackContext ctx)
     {
-        if (context.started && canShoot)
+        if (ctx.started && canShoot)
+        {
+            //TO DO: play shoot sound
+            animator.Play("Attack");
+            StartCoroutine("ShootProjectile");
+        }
+    }
+    //Shoot function overload so it can be used on the shoot button
+    public void Shoot()
+    {
+        if (canShoot)
         {
             //TO DO: play shoot sound
             animator.Play("Attack");

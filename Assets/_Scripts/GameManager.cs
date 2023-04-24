@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private GameObject shootButton;
+    [SerializeField] private GameObject jumpButton;
     [SerializeField] private TMP_Text finalScoreText;
     [SerializeField] private GameObject[] hearts = new GameObject[3];
     [SerializeField] private GameObject healthBar;
@@ -85,6 +86,7 @@ public class GameManager : MonoBehaviour
             pauseButton.SetActive(false);
             pauseScreen.SetActive(true);
             shootButton.SetActive(false);
+            jumpButton.SetActive(false);
             healthBar.SetActive(false);
 
             scoreText.gameObject.SetActive(false);
@@ -96,6 +98,7 @@ public class GameManager : MonoBehaviour
             pauseButton.SetActive(true);
             pauseScreen.SetActive(false);
             shootButton.SetActive(true);
+            jumpButton.SetActive(true);
             healthBar.SetActive(false);
 
             scoreText.gameObject.SetActive(true);
@@ -113,6 +116,7 @@ public class GameManager : MonoBehaviour
         scoreText.gameObject.SetActive(true);
         pauseButton.SetActive(true);
         healthBar.SetActive(true);
+        jumpButton.SetActive(true);
     }
 
     private void ShowGameOverScreen()
@@ -121,6 +125,7 @@ public class GameManager : MonoBehaviour
         scoreText.gameObject.SetActive(false);
         gameOverScreen.SetActive(true);
         shootButton.SetActive(false);
+        jumpButton.SetActive(false);
         pauseButton.SetActive(false);
         healthBar.SetActive(false);
     }

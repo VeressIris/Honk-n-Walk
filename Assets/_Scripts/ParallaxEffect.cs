@@ -22,7 +22,7 @@ public class ParallaxEffect : MonoBehaviour
         transform.position = new Vector3(startPosX + moveDist, transform.position.y, transform.position.z);
 
         //loop background
-        if (temp > startPosX + backgroundSize)
+        if (temp > startPosX + backgroundSize - 10) //on higher resolutions you could tell the background looped without that -10
         {
             startPosX += backgroundSize;
         }

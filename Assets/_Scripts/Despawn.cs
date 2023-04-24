@@ -11,7 +11,7 @@ public class Despawn : MonoBehaviour
 
     private void Update()
     {
-        if (transform.position.x < cam.transform.position.x - 10)
+        if (transform.position.x < cam.transform.position.x - 20)
         {
             Destroy(gameObject);
         }
