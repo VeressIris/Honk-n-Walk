@@ -1,22 +1,24 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Damage : MonoBehaviour
 {
     private GameManager gameManager;
-
     private Rigidbody2D playerRb;
     private PlayerController playerController;
-
-    private BoxCollider2D groundCollider;
-
+    private CameraShake shakeScript;
+    private Animator playerAnim;
+    private PlayerInput playerInput;
     private void Start()
     {
         gameManager = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
 
         playerRb = GameObject.FindWithTag("Player").GetComponent<Rigidbody2D>();
         playerController = playerRb.gameObject.GetComponent<PlayerController>();
-
-        groundCollider = GameObject.Find("Ground").GetComponent<BoxCollider2D>();
+        playerAnim = playerRb.gameObject.GetComponent<Animator>();
+        playerInput = playerRb.gameObject.GetComponent<PlayerInput>();
+        
+        shakeScript = GameObject.FindWithTag("MainCamera").GetComponentInChildren<CameraShake>();
     }
 
     private void OnTriggerEnter2D(Collider2D coll)
@@ -24,7 +26,9 @@ public class Damage : MonoBehaviour
         if (coll.gameObject.CompareTag("Player"))
         {
             //TO DO: play sound effect
-            
+
+            shakeScript.ShakeCamera(1f, 0.2f);
+
             playerController.health--;
             
             gameManager.HideHearts(playerController.health);
@@ -34,14 +38,48 @@ public class Damage : MonoBehaviour
             if (playerController.health == 0)
             {
                 gameManager.gameOver = true;
-
-                playerRb.AddForce(Vector2.up * 10f, ForceMode2D.Impulse); //bounce player
-                groundCollider.enabled = false; //make player fall through the ground
+                
+                KillPlayer();
             }
         }
         else if (coll.gameObject.CompareTag("Goose") && this.gameObject.CompareTag("Enemy"))
         {
             gameManager.gameOver = true;
+
+            shakeScript.ShakeCamera(1.25f, 0.2f);
+            KillGoose(coll);
         }
+    }
+
+    private void KillGoose(Collider2D coll)
+    {
+        GameObject goose = coll.gameObject;
+        goose.AddComponent<Rigidbody2D>();
+        Rigidbody2D gooseRb = goose.GetComponent<Rigidbody2D>();
+        gooseRb.gravityScale = 2f;
+        BoxCollider2D gooseCollider = goose.GetComponent<BoxCollider2D>();
+        Vector3 gooseScale = goose.transform.localScale;
+        Animator gooseAnim = goose.GetComponent<Animator>();
+        PlayerController playerController = playerRb.gameObject.GetComponent<PlayerController>();
+
+        goose.transform.localScale = new Vector3(gooseScale.x, gooseScale.y * -1, gooseScale.z); //flip goose upside down
+
+        gooseRb.bodyType = RigidbodyType2D.Dynamic; //make goose fall
+        gooseRb.AddForce(Vector2.up * 2.5f, ForceMode2D.Impulse); //make goose bounce upwards before falling
+
+        gooseCollider.enabled = false; //let goose fall through floor
+        gooseAnim.Play("GooseDead");
+
+        playerInput.enabled = false;
+        playerController.enabled = false;
+        playerAnim.Play("Idle");
+    }
+
+    private void KillPlayer()
+    {
+        BoxCollider2D playerCollider = playerRb.gameObject.GetComponent<BoxCollider2D>();
+        
+        playerCollider.size = new Vector2(0.25f, 0.08f); //change box collider size so player doesn't appear to float
+        playerInput.enabled = false;
     }
 }

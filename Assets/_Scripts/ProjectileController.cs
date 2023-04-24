@@ -1,18 +1,15 @@
 using System.Collections;
 using UnityEngine;
 
-
 public class ProjectileController : MonoBehaviour
 {
     private Rigidbody2D rb;
     private float speed = 10f;
     private Animator animator;
-    private GameManager gameManager;
 
     void Start()
     {    
         rb = GetComponent<Rigidbody2D>();
-        gameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
         animator = GetComponent<Animator>();
 
         rb.velocity = transform.right * speed;
@@ -27,7 +24,7 @@ public class ProjectileController : MonoBehaviour
             {
                 Destroy(gameObject);
             }
-           
+
             KillEnemy(coll);
         }
     }
@@ -45,7 +42,7 @@ public class ProjectileController : MonoBehaviour
         enemyRb.gravityScale = 2f;
         enemyRb.AddForce(Vector2.up * 2.5f, ForceMode2D.Impulse); //make enemy bounce upwards before falling
         
-        enemyCollider.enabled = false;
+        enemyCollider.enabled = false; //let enemy fall through floor
 
         //stop animating (currently only the crow has animation so the if statement is necessary)
         if (enemyAnimator != null)

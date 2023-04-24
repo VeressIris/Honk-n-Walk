@@ -33,13 +33,20 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (Grounded())
+        if (health > 0)
         {
-            animator.Play("Run");
+            if (Grounded() && !Attacking())
+            {
+                animator.Play("Run");
+            }
+            else if (!Grounded())
+            {
+                animator.Play("Jump");
+            }
         }
         else
         {
-            animator.Play("Jump");
+            animator.Play("Death");
         }
     }
 
@@ -65,6 +72,7 @@ public class PlayerController : MonoBehaviour
         if (context.started && canShoot)
         {
             //TO DO: play shoot sound
+            animator.Play("Attack");
             StartCoroutine("ShootProjectile");
         }
     }
@@ -75,5 +83,16 @@ public class PlayerController : MonoBehaviour
         canShoot = false;
         yield return new WaitForSeconds(cooldown);
         canShoot = true;
+    }
+
+    bool Attacking()
+    {
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Attack") &&
+            animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+        {
+            return true;
+        }
+
+        return false;
     }
 }
