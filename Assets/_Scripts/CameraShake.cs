@@ -5,13 +5,12 @@ using Cinemachine;
 
 public class CameraShake : MonoBehaviour
 {
-    private CinemachineVirtualCamera virtualCamera;
+    [SerializeField] private CinemachineVirtualCamera virtualCamera;
     private CinemachineBasicMultiChannelPerlin perlinNoise;
     [SerializeField] private GameObject mainCam;
 
-    void Awake()
+    void Start()
     {
-        virtualCamera = GetComponent<CinemachineVirtualCamera>();
         if (virtualCamera != null)
         {
             perlinNoise = virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();

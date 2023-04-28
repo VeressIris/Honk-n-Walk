@@ -8,27 +8,36 @@ public class PlayerController : MonoBehaviour
     
     [Header("Jumping")]
     [SerializeField] private float jumpForce = 10f;
-    private Rigidbody2D rb;
-    private BoxCollider2D playerCollider;
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private BoxCollider2D playerCollider;
     [SerializeField] private LayerMask groundMask;
 
     [Header("Shooting")]
     [SerializeField] private GameObject projectile;
     [SerializeField] private GameObject shootingPoint;
     private bool canShoot = true;
-    [SerializeField] private float cooldown = 0.5f;
+    [SerializeField] private float cooldown = 0.65f;
 
     [Header("Animation")]
     [SerializeField] private Animator animator;
 
-    [Header("Shooting")]
-    [SerializeField] private Transform cam; // need this in order to spawn projectile as child of the camera in order for it to not lag behind camera
-    
+    private Transform cam; // need this in order to spawn projectile as child of the camera in order for it to not lag behind camera
+
+    [Header("SFX")]
+    [SerializeField] private PlaySFX sfx;
+    [SerializeField] private AudioClip jumpSFX;
+    [SerializeField] private AudioClip shootSFX;
+
+    void Awake()
+    {
+        cam = GameObject.FindGameObjectWithTag("MainCamera").transform;
+
+        playerCollider.size = new Vector2(0.1422123f, 0.33f); //make sure player collider is set to the right size
+    }
+
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-
-        playerCollider = GetComponent<BoxCollider2D>();
+        health = 3; //make sure player has full health
     }
 
     private void Update()
@@ -55,6 +64,8 @@ public class PlayerController : MonoBehaviour
     {
         if (Grounded())
         {
+            sfx.PlaySound(jumpSFX, 1f);
+
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         }
     }
@@ -71,7 +82,8 @@ public class PlayerController : MonoBehaviour
     {
         if (ctx.started && canShoot)
         {
-            //TO DO: play shoot sound
+            sfx.PlaySound(shootSFX, 1.25f);
+
             animator.Play("Attack");
             StartCoroutine("ShootProjectile");
         }
@@ -81,7 +93,8 @@ public class PlayerController : MonoBehaviour
     {
         if (canShoot)
         {
-            //TO DO: play shoot sound
+            sfx.PlaySound(shootSFX, 0.75f);
+
             animator.Play("Attack");
             StartCoroutine("ShootProjectile");
         }

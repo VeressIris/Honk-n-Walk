@@ -8,10 +8,8 @@ public class GameManager : MonoBehaviour
     
     [Header("Obstacles")]
     [SerializeField] private GameObject[] obstacles;
-    [SerializeField] private float spawnCooldown = 3f;
     [SerializeField] private Transform spawner;
     [SerializeField] private GameObject[] airObstacles;
-    [SerializeField] private float airSpawnCooldown = 6.5f;
     [SerializeField] private Transform airSpawner;
 
     private float score = 0f;
@@ -33,13 +31,17 @@ public class GameManager : MonoBehaviour
     [Header("Difficulty")]
     [SerializeField] private MoveCamera camScript;
     [SerializeField] private AnimationCurve difficultyCurve;
+    [SerializeField] private AnimationCurve groundSpawnCooldownCurve;
+    [SerializeField] private AnimationCurve airSpawnCooldownCurve;
 
     void Start()
     {
+        Time.timeScale = 1; //make sure game is playing
+
         SetUIElements();
 
-        StartCoroutine(Spawn(obstacles, spawner, spawnCooldown, 0)); //start spawning ground osbtacles
-        StartCoroutine(Spawn(airObstacles, airSpawner, airSpawnCooldown, 2)); //start spawning air osbtacles
+        StartCoroutine(Spawn(obstacles, spawner, groundSpawnCooldownCurve)); //start spawning ground osbtacles
+        StartCoroutine(Spawn(airObstacles, airSpawner, 2.5f, airSpawnCooldownCurve)); //start spawning air osbtacles
     }
 
     void Update()
@@ -53,19 +55,34 @@ public class GameManager : MonoBehaviour
             ShowGameOverScreen();
         }
 
-        //increase difficulty
         camScript.speed = difficultyCurve.Evaluate((int)score);
     }
 
-    private IEnumerator Spawn(GameObject[] obstacles, Transform spawner, float spawnCooldown, int initCooldown)
+    private IEnumerator Spawn(GameObject[] obstacles, Transform spawner, AnimationCurve spawnCooldownCurve)
     {
+        float spawnCooldown;
         while (!gameOver)
         {
             int i = Random.Range(0, obstacles.Length); //pick random obstacle from obstacle list
 
-            yield return new WaitForSeconds(initCooldown);
+            Instantiate(obstacles[i], spawner.position, spawner.rotation); //spawn obstacle at position of spawner
+            spawnCooldown = spawnCooldownCurve.Evaluate((int)score); //increase spawning speed
+
+            yield return new WaitForSeconds(spawnCooldown);
+        }
+    }
+    private IEnumerator Spawn(GameObject[] obstacles, Transform spawner, float initCooldown, AnimationCurve spawnCooldownCurve)
+    {
+        float spawnCooldown;
+
+        yield return new WaitForSeconds(initCooldown);
+     
+        while (!gameOver)
+        {
+            int i = Random.Range(0, obstacles.Length); //pick random obstacle from obstacle list
 
             Instantiate(obstacles[i], spawner.position, spawner.rotation); //spawn obstacle at position of spawner
+            spawnCooldown = spawnCooldownCurve.Evaluate((int)score); //increase spawning speed
 
             yield return new WaitForSeconds(spawnCooldown);
         }
@@ -99,7 +116,7 @@ public class GameManager : MonoBehaviour
             pauseScreen.SetActive(false);
             shootButton.SetActive(true);
             jumpButton.SetActive(true);
-            healthBar.SetActive(false);
+            healthBar.SetActive(true);
 
             scoreText.gameObject.SetActive(true);
         }

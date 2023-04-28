@@ -6,6 +6,9 @@ public class ProjectileController : MonoBehaviour
     private float speed = 10f;
     private Animator animator;
 
+    [SerializeField] private PlaySFX sfx;
+    [SerializeField] private AudioClip killEnemySFX;
+
     void Start()
     {    
         rb = GetComponent<Rigidbody2D>();
@@ -18,6 +21,8 @@ public class ProjectileController : MonoBehaviour
     {
         if (coll.gameObject.CompareTag("Enemy"))
         {
+            sfx.PlaySound(killEnemySFX, 0.78f); //!SOUND NOT PLAYING
+
             animator.Play("Impact");
             if (StoppedPlaying())
             {
@@ -30,6 +35,8 @@ public class ProjectileController : MonoBehaviour
 
     private void KillEnemy(Collider2D coll)
     {
+        sfx.PlaySound(killEnemySFX, 0.78f);
+
         Rigidbody2D enemyRb = coll.gameObject.GetComponent<Rigidbody2D>();
         BoxCollider2D enemyCollider = coll.gameObject.GetComponent<BoxCollider2D>();
         Vector3 enemyScale = coll.gameObject.transform.localScale;

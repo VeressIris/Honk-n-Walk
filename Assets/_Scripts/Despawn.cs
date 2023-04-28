@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Despawn : MonoBehaviour
 {
-    [SerializeField] private GameObject cam;
+    private GameObject cam;
 
     private void Start()
     {
@@ -11,7 +11,8 @@ public class Despawn : MonoBehaviour
 
     private void Update()
     {
-        if (transform.position.x < cam.transform.position.x - 20)
+        if (transform.position.x < cam.transform.position.x - 20 || // -20 to make sure the object despawns behind the camera regardless of resolution
+            transform.position.y < -8) // -8 is where it goes off screen vertically
         {
             Destroy(gameObject);
         }

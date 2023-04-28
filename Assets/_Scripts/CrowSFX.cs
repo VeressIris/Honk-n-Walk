@@ -4,14 +4,9 @@ using UnityEngine;
 
 public class CrowSFX : MonoBehaviour
 {
-    private AudioSource audioSrc;
+    [SerializeField] private AudioSource audioSrc;
 
-    void Start()
-    {
-        audioSrc = GetComponent<AudioSource>();    
-    }
-
-    public void PlaySound()
+    public void PlayCrowSound()
     {
         audioSrc.volume = Random.Range(0.8f, 1f);
         audioSrc.pitch = Random.Range(0.75f, 0.9f);
