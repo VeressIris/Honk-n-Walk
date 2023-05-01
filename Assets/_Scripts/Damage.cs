@@ -45,7 +45,7 @@ public class Damage : MonoBehaviour
             gameManager.HideHearts(playerController.health);
 
             //bonus effects:
-            shakeScript.ShakeCamera(1.85f, 0.235f);
+            shakeScript.ShakeCamera(1f, 0.225f);
             StartCoroutine(postProcessing.PlayerDamageEffect(0.5f));
             playerRb.AddForce(Vector2.up * 2f, ForceMode2D.Impulse); //bounce player
 
@@ -67,7 +67,7 @@ public class Damage : MonoBehaviour
 
             gameManager.gameOver = true;
 
-            shakeScript.ShakeCamera(2f, 0.25f);
+            shakeScript.ShakeCamera(1.75f, 0.275f);
             KillGoose(coll);
         }
     }

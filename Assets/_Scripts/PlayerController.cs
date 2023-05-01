@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
     {
         cam = GameObject.FindGameObjectWithTag("MainCamera").transform;
 
-        playerCollider.size = new Vector2(0.1422123f, 0.33f); //make sure player collider is set to the right size
+        playerCollider.size = new Vector2(0.1308659f, 0.33f); //make sure player collider is set to the right size
     }
 
     void Start()

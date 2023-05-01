@@ -5,7 +5,7 @@ public class SceneController : MonoBehaviour
 {
     void Start()
     {
-        Time.timeScale = 1; //make sure main menu is playing
+        Time.timeScale = 1; //make sure main menu isn't paused
     }
 
     public void ReturnToMainMenu()
@@ -16,5 +16,10 @@ public class SceneController : MonoBehaviour
     public void LoadGame()
     {
         SceneManager.LoadScene(1);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }
