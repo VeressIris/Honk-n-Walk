@@ -2,33 +2,33 @@ using UnityEngine;
 
 public class ProjectileController : MonoBehaviour
 {
-    private Rigidbody2D rb;
+    [Header("Physics")]
+    [SerializeField] private Rigidbody2D rb;
     private float speed = 10f;
-    private Animator animator;
 
+    [Header("Animation")]
+    [SerializeField] private Animator animator;
+
+    [Header("Audio")]
     [SerializeField] private PlaySFX sfx;
     [SerializeField] private AudioClip killEnemySFX;
 
     void Start()
     {    
-        rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
-
         rb.velocity = transform.right * speed;
     }
+
 
     private void OnTriggerEnter2D(Collider2D coll)
     {
         if (coll.gameObject.CompareTag("Enemy"))
         {
-            sfx.PlaySound(killEnemySFX, 0.78f); //!SOUND NOT PLAYING
+            this.gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static; //stop projectile from moving
+
+            sfx.PlaySound(killEnemySFX, 0.55f);
 
             animator.Play("Impact");
-            if (StoppedPlaying())
-            {
-                Destroy(gameObject);
-            }
-
+            
             KillEnemy(coll);
         }
     }
@@ -57,14 +57,9 @@ public class ProjectileController : MonoBehaviour
         }
     }
 
-    bool StoppedPlaying()
+    //called in the animation event
+    public void DestroyProjectile()
     {
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Impact") &&
-            animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
-        {
-            return false;
-        }
-
-        return true;
+        Destroy(gameObject);
     }
 }

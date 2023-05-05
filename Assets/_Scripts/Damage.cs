@@ -44,6 +44,9 @@ public class Damage : MonoBehaviour
 
             gameManager.HideHearts(playerController.health);
 
+            //disable collider (to avoid taking damage twice)
+            this.gameObject.GetComponent<Collider2D>().enabled = false; ;
+
             //bonus effects:
             shakeScript.ShakeCamera(1f, 0.225f);
             StartCoroutine(postProcessing.PlayerDamageEffect(0.5f));

@@ -60,21 +60,18 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator Spawn(GameObject[] obstacles, Transform spawner, AnimationCurve spawnCooldownCurve)
     {
-        float spawnCooldown;
         while (!gameOver)
         {
             int i = Random.Range(0, obstacles.Length); //pick random obstacle from obstacle list
 
             Instantiate(obstacles[i], spawner.position, spawner.rotation); //spawn obstacle at position of spawner
-            spawnCooldown = spawnCooldownCurve.Evaluate((int)score); //increase spawning speed
+            float spawnCooldown = spawnCooldownCurve.Evaluate((int)score); //increase spawning speed
 
             yield return new WaitForSeconds(spawnCooldown);
         }
     }
     private IEnumerator Spawn(GameObject[] obstacles, Transform spawner, float initCooldown, AnimationCurve spawnCooldownCurve)
     {
-        float spawnCooldown;
-
         yield return new WaitForSeconds(initCooldown);
      
         while (!gameOver)
@@ -82,7 +79,7 @@ public class GameManager : MonoBehaviour
             int i = Random.Range(0, obstacles.Length); //pick random obstacle from obstacle list
 
             Instantiate(obstacles[i], spawner.position, spawner.rotation); //spawn obstacle at position of spawner
-            spawnCooldown = spawnCooldownCurve.Evaluate((int)score); //increase spawning speed
+            float spawnCooldown = spawnCooldownCurve.Evaluate((int)score); //increase spawning speed
 
             yield return new WaitForSeconds(spawnCooldown);
         }
